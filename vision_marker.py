@@ -122,18 +122,25 @@ aruco_dict.bytesList[42] = aruco.Dictionary_getByteListFromBits(mybits)
 mybits = np.array([[1,1,1,1,1],[1,0,1,0,1],[1,1,1,1,1],[1,0,1,0,1],[1,1,1,1,1]], dtype = np.uint8)
 aruco_dict.bytesList[43] = aruco.Dictionary_getByteListFromBits(mybits)
 
-frame = cv2.imread("pic.jpg")
-frame1=cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+frame = cv2.imread("lol3.png")
+
+frame1=cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+lower_yel = np.array([23,41,133], dtype = "uint8")
+upper_yel = np.array([60,255,255], dtype = "uint8")
+frame1 = cv2.inRange(frame1, lower_yel, upper_yel)
+frame1=255-frame1
 # clahe = cv2.createCLAHE(clipLimit=22.0, tileGridSize=(10,30))
 # frame1 = clahe.apply(frame1)
 
 # frame1 = cv2.adaptiveThreshold(frame1, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,11,2)
 cv2.imshow('1', frame1)
+# cv2.waitKey()
 #lists of ids and the corners beloning to each id
 corners, ids, rejectedImgPoints = aruco.detectMarkers(frame1, aruco_dict)
 # draw markers on farme
 frame1 = aruco.drawDetectedMarkers(frame, corners, (ids),  borderColor=(0, 255, 0))
 print(ids)
+# cv2.waitKey()
 center=[0]*(2*len(ids))
 m=0
 while m < (len(ids)):
@@ -146,7 +153,7 @@ while m < (len(ids)):
 
 cv2.imshow('frame',frame)
 cv2.imwrite('detected_markers1.jpg',frame)
-
+cv2.waitKey()
 root=Tk()
 
 frame = Frame(root, bd=2, relief=SUNKEN)
