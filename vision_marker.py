@@ -133,7 +133,7 @@ frame1=255-frame1
 # frame1 = clahe.apply(frame1)
 
 # frame1 = cv2.adaptiveThreshold(frame1, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,11,2)
-cv2.imshow('1', frame1)
+# cv2.imshow('1', frame1)
 # cv2.waitKey()
 #lists of ids and the corners beloning to each id
 corners, ids, rejectedImgPoints = aruco.detectMarkers(frame1, aruco_dict)
@@ -153,7 +153,7 @@ while m < (len(ids)):
 
 cv2.imshow('frame',frame)
 cv2.imwrite('detected_markers1.jpg',frame)
-cv2.waitKey()
+# cv2.waitKey()
 root=Tk()
 
 frame = Frame(root, bd=2, relief=SUNKEN)
