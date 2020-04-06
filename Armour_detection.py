@@ -4,8 +4,10 @@ import numpy as np
 import math
 # cap=cv.VideoCapture(1)
 #cap.set(cv.CAP_PROP_EXPOSURE,-6)
-
-frame = cv.imread("pic.jpeg")
+cv.startWindowThread()
+frame = cv.imread("lol3.png")
+frame2=frame
+frame3=frame2
 # tracker = cv.TrackerMIL_create()
 rects=[]
 # while True :
@@ -18,8 +20,13 @@ rects=[]
 # thresh = cv.dilate(thresh, None, iterations=4)
 
 # bright=cv.bitwise_and(frame,frame,mask=thresh)
-hsv=cv.cvtColor(frame,cv.COLOR_BGR2HSV)
-mask=cv.inRange(hsv,np.array([90,150,150]),np.array([150,255,255]))
+ekkaurmask=cv.inRange(frame,np.array([0, 0,180]),np.array([255,255,255]))
+frame1=cv.bitwise_and(frame,frame,mask=ekkaurmask)
+hsv=cv.cvtColor(frame1,cv.COLOR_BGR2HSV)
+mask1=cv.inRange(hsv,np.array([0, 70, 150]),np.array([10,255,255]))
+mask2=mask1
+# mask2=cv.inRange(hsv,np.array([170, 70, 50]),np.array([180, 255, 255]))
+mask=cv.bitwise_or(mask1,mask2)
 final=cv.bitwise_and(frame,frame,mask=mask)
 # yo=cv.cvtColor(final,cv.COLOR_BGR2GRAY)
 # # yo = cv.erode(gray, None, iterations=1)
@@ -29,44 +36,69 @@ final=cv.bitwise_and(frame,frame,mask=mask)
 # #print(cnts)i
 # # for i in range(15):
 #     cv.drawContours(yo,cnts[i],-1,(0,255,0),3)
-cv.imshow('b',final)
+'''
+this is for elimination of hb. already done by applying consecutive masks
+# cv.waitKey()
 gray=cv.cvtColor(final,cv.COLOR_BGR2GRAY)
-ret, thresh = cv.threshold(gray, 127, 255, 0)
-contours, hierarchy = cv.findContours(thresh, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+# ret, thresh = cv.threshold(gray, 100, 255, 0)
+# cv.imshow('b',gray)
+cv.waitKey()
+contours, hierarchy = cv.findContours(mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
 # cv.drawContours(final, contours, -1, (0,255,0), 3)
 hset=[]
-# print(contours)
+# cv.imshow('b',final)
+cv.waitKey()
+print(contours)
 filters=np.ones(final.shape[:2],dtype="uint8")*255
-cv.imshow('lol',filters)
+
+frame1=frame
+# cv.imshow('lol',filters)
+# cv.waitKey()
 for i in contours:
     x,y,w,h = cv.boundingRect(i)
-    if w/h>1.8 and h>5:
+    if True :
         rect=cv.minAreaRect(i)
         box=cv.boxPoints(rect)
         box=np.int0(box)
-        cv.drawContours(frame, [box],0,(0,0,255),2)
+        cv.drawContours(final, [box],0,(0,255,255),2)
         centre=rect[0]
         
-        cv.circle(frame,(int(centre[0]), int(centre[1])), 2, (0,0,255), 2)
-    if w/h<0.5:
+        # cv.circle(frame,(int(centre[0]), int(centre[1])), 2, (0,0,255), 2)
+    if False:
         cv.rectangle(final,(x,y),(x+w,y+h),(255,0,0),2)
         cv.drawContours(filters,[i],-1,1,2)
         # hset.append(h)
-cv.imshow('d',final)
+
 # cv.imshow('c',filters)
 # print(hset)      
-image=cv.bitwise_and(frame,frame,mask=cv.bitwise_not(filters))  
+image=frame1
+# cv.imshow('d',image)
 gray=cv.cvtColor(image,cv.COLOR_BGR2GRAY)
 
 ret, thresh = cv.threshold(gray, 127, 255, 0)
-contours, hierarchy = cv.findContours(thresh, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+'''
+contours, hierarchy = cv.findContours(mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
 rectangles=[]
 max_rect=[]
-bgr=cv.cvtColor(gray,cv.COLOR_GRAY2BGR)
+for i in contours:
+    x,y,w,h = cv.boundingRect(i)
+    rect=cv.minAreaRect(i)
+    box=cv.boxPoints(rect)
+    box=np.int0(box)
+    cv.drawContours(frame2, [box],0,(255,255,255),3)
+    centre=rect[0]
+
+
+# bgr=cv.cvtColor(gray,cv.COLOR_GRAY2BGR)
+''' ^^ ye kya chutiyaap hai bc ^^ '''
+
+#lolololoolololololololololololololololololol
+'''
+this is for preffered armour plate, we dont need that here 
 max_area=0
 ind_max=0
 # for index, cont in enumerate(contours):
-    
+cv.waitKey()    
 for j,i in enumerate(contours):
     rect= cv.minAreaRect(i)
     w, h=rect[1]
@@ -98,6 +130,7 @@ for j,i in enumerate(contours):
 #             print(center_target)
 #             cv.circle(frame,center_target,4,(0,255,0),5)
 # cv.imshow('a',frame)
+
 try:
     var = 0
     interest=[]
@@ -178,16 +211,64 @@ try:
     #     cv.rectangle(frame, p1, p2, (0,0,255))
 except:
     print('nahi mila')
-cv.imwrite('lol.png',frame)
+'''
+# cv.imshow('lol',frame2)
+''' bot detection'''
+Mask=cv.inRange(frame3,np.array([0, 0, 0]),np.array([20,20,30]))
+Mask=cv.bitwise_not(Mask)
+kernel = np.ones((5,5),np.uint8)
+dilation = cv.dilate(Mask,kernel,iterations = 2)
+
+erosion = cv.erode(dilation,kernel,iterations = 16)
+# cv.imshow('b',erosion)
+Mask=cv.bitwise_not(erosion)
+# cv.imshow('b',Mask)
+# cv.imshow('dil',dilation)
+# mask2=mask1
+# mask2=cv.inRange(hsv,np.array([170, 70, 50]),np.array([180, 255, 255]))
+# mask=cv.bitwise_or(mask1,mask2)
+contours, hierarchy = cv.findContours(Mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+for i in contours:
+    x,y,w,h= cv.boundingRect(i)
+    # paddding=100
+    rect=cv.minAreaRect(i)
+    # cv.rectangle(frame3,(x,y),(x+w,y+h),(77,93,100),-1)
+    # paddding=100
+    # rect[0][0]-=paddding
+    # rect[0][1]-=paddding
+    # rect[1][0]+=paddding
+    # rect[1][0]+=paddding
+    box=cv.boxPoints(rect)
+    # print(box)
+    # paddding=100
+    # [0][0]-=paddding
+    # rect[0][1]-=paddding
+    # rect[1][0]+=paddding
+    # rect[1][0]+=paddding
+    box=np.int0(box)
+    centre=rect[0]
+    # cv.rectangle(frame3,box[0],box[2],(0,255,255))
+    # cv.drawContours(frame3, [box],0,(77,93,100),-1)
+    cv.circle(frame3,(int(centre[0]), 200, 2, (77,93,100), 2)
+    cv.circle(frame3,(int(centre[0]), int(centre[1])), 2, (0,255,255), 2)
+
+cv.imshow('b',frame3)
+'''this was for checking the bodycenter 
+Final=cv.bitwise_and(frame3,frame3,mask=Mask)
+cv.imshow('bc',Final)
 # gray=cv.cvtColor(image,cv.COLOR_BGR2GRAY)
 # ret, thresh = cv.threshold(gray, 127, 255, 0)
 # _, contours, hierarchy = cv.findContours(thresh, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
 # cnts=sorted(contours,key=cv.contourArea,reverse=True)[:2]
+'''
 # cv.drawContours(image,cnts,-1,0,-1)
 # cv.imshow('b',image)
 # cv.imshow('frame',yo)
 # cv.imshow('mak',bright)
-cv.waitKey(10)==27
+cv.waitKey(0)
+cv.waitKey(1)
+cv.destroyAllWindows()
+cv.waitKey(1)
     # break
     # cv.destroyAllWindows()
 # cap.release()

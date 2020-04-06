@@ -152,7 +152,7 @@ while m < (len(ids)):
     m=m+1
 
 cv2.imshow('frame',frame)
-cv2.imwrite('detected_markers1.jpg',frame)
+cv2.imwrite('detected_markers0.jpg',frame)
 # cv2.waitKey()
 root=Tk()
 
@@ -169,7 +169,7 @@ xscroll.config(command=canvas.xview)
 yscroll.config(command=canvas.yview)
 frame.pack(fill=BOTH,expand=1)
 
-img = ImageTk.PhotoImage(Image.open('detected_markers1.jpg'))
+img = ImageTk.PhotoImage(Image.open('detected_markers0.jpg'))
 canvas.create_image(0,0,image=img,anchor="nw")
 canvas.config(scrollregion=canvas.bbox(ALL))
 
