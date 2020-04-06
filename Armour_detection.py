@@ -5,9 +5,15 @@ import math
 # cap=cv.VideoCapture(1)
 #cap.set(cv.CAP_PROP_EXPOSURE,-6)
 cv.startWindowThread()
-frame = cv.imread("lol3.png")
-frame2=frame
-frame3=frame2
+img = cv.imread("lol3.png")
+scale_percent = 40 # percent of original size
+width = int(img.shape[1] * scale_percent / 100)
+height = int(img.shape[0] * scale_percent / 100)
+dim = (width, height)
+# resize image
+frame = cv.resize(img, dim, interpolation = cv.INTER_AREA)
+frame2=frame.copy()
+frame3=frame2.copy()
 # tracker = cv.TrackerMIL_create()
 rects=[]
 # while True :
@@ -27,7 +33,7 @@ mask1=cv.inRange(hsv,np.array([0, 70, 150]),np.array([10,255,255]))
 mask2=mask1
 # mask2=cv.inRange(hsv,np.array([170, 70, 50]),np.array([180, 255, 255]))
 mask=cv.bitwise_or(mask1,mask2)
-final=cv.bitwise_and(frame,frame,mask=mask)
+frame1=cv.bitwise_and(frame1,frame,mask=mask)
 # yo=cv.cvtColor(final,cv.COLOR_BGR2GRAY)
 # # yo = cv.erode(gray, None, iterations=1)
 # yo = cv.dilate(yo, None, iterations=1)
@@ -228,6 +234,7 @@ Mask=cv.bitwise_not(erosion)
 # mask2=cv.inRange(hsv,np.array([170, 70, 50]),np.array([180, 255, 255]))
 # mask=cv.bitwise_or(mask1,mask2)
 contours, hierarchy = cv.findContours(Mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+frame4=frame3.copy()
 for i in contours:
     x,y,w,h= cv.boundingRect(i)
     # paddding=100
@@ -248,11 +255,25 @@ for i in contours:
     box=np.int0(box)
     centre=rect[0]
     # cv.rectangle(frame3,box[0],box[2],(0,255,255))
-    # cv.drawContours(frame3, [box],0,(77,93,100),-1)
-    cv.circle(frame3,(int(centre[0]), 200, 2, (77,93,100), 2)
-    cv.circle(frame3,(int(centre[0]), int(centre[1])), 2, (0,255,255), 2)
+    cv.drawContours(frame4, [box],0,(255,255,255),2)
+    # cv.circle(frame3,(int(centre[0]), 200, 2, (77,93,100), 2)
+    print(centre)
+    cv.circle(frame3,(int(centre[0]), int(centre[1])), int (w*0.95), (77,93,100), -1)
+    cv.circle(frame3,(int(centre[0]), int(centre[1])), 7, (0,0,0), -1)
+cv.imshow('b',frame2)
+cv.imshow('bc',frame3)
+cv.imshow('bcc',frame4)
+cv.imshow('bccc',frame1)
+cv.imshow('c',frame)
+'''
+                frame 3 is to be used for PT
+                    frame 4 is to be used for hb detection, direction needs to be appended on frame 3
+                bot detection ends here 
+'''
 
-cv.imshow('b',frame3)
+
+
+
 '''this was for checking the bodycenter 
 Final=cv.bitwise_and(frame3,frame3,mask=Mask)
 cv.imshow('bc',Final)
