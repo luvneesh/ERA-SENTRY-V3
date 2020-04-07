@@ -133,7 +133,7 @@ frame1=255-frame1
 # frame1 = clahe.apply(frame1)
 
 # frame1 = cv2.adaptiveThreshold(frame1, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,11,2)
-cv2.imshow('1', frame1)
+# cv2.imshow('1', frame1)
 # cv2.waitKey()
 #lists of ids and the corners beloning to each id
 corners, ids, rejectedImgPoints = aruco.detectMarkers(frame1, aruco_dict)
@@ -152,8 +152,8 @@ while m < (len(ids)):
     m=m+1
 
 cv2.imshow('frame',frame)
-cv2.imwrite('detected_markers1.jpg',frame)
-cv2.waitKey()
+cv2.imwrite('detected_markers0.jpg',frame)
+# cv2.waitKey()
 root=Tk()
 
 frame = Frame(root, bd=2, relief=SUNKEN)
@@ -169,7 +169,7 @@ xscroll.config(command=canvas.xview)
 yscroll.config(command=canvas.yview)
 frame.pack(fill=BOTH,expand=1)
 
-img = ImageTk.PhotoImage(Image.open('detected_markers1.jpg'))
+img = ImageTk.PhotoImage(Image.open('detected_markers0.jpg'))
 canvas.create_image(0,0,image=img,anchor="nw")
 canvas.config(scrollregion=canvas.bbox(ALL))
 
