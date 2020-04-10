@@ -31,7 +31,37 @@ while(frames<299):
     rects=[]
     tracker = cv.TrackerKCF_create()
     timer = cv.getTickCount()
-
+    ''' hb detection'''
+    # bright=cv.bitwise_and(frame,frame,mask=thresh)
+    ekkaurmask=cv.inRange(frame2,np.array([0, 0,248]),np.array([255,255,255]))
+    kernel = np.ones((5,5),np.uint8)
+    # # cv.imshow('b',Mask)
+    erosion = cv.dilate(ekkaurmask,kernel,iterations = 1)
+    
+    # dilation1 = cv.erode(erosion,kernel,iterations = 1)
+    # cv.imshow('b',dilation1)  
+    # erosion1 = cv.erode(dilation1,kernel,iterations = 10)
+    # cv.imshow('lol',erosion1)
+    frame2=cv.bitwise_and(frame2,frame2,mask=erosion)
+    
+    hsv=cv.cvtColor(frame2,cv.COLOR_BGR2HSV)
+    mask1=cv.inRange(hsv,np.array([0, 0, 0]),np.array([255,255,255]))
+    cv.imshow('lol',hsv)
+    time.sleep(1)
+    mask2=mask1
+    # mask2=cv.inRange(hsv,np.array([170, 70, 50]),np.array([180, 255, 255]))
+    mask=cv.bitwise_or(mask1,mask2)
+    frame1=cv.bitwise_and(frame1,frame,mask=mask)
+    '''here'''
+    # yo=cv.cvtColor(final,cv.COLOR_BGR2GRAY)
+    # # yo = cv.erode(gray, None, iterations=1)
+    # yo = cv.dilate(yo, None, iterations=1)
+    # # cnts = np.array(cnts).reshape((-1,1,2)).astype(np.int32)
+    # cnts = cv.findContours(yo.copy(), cv.RETR_EXTERNAL,cv.CHAIN_APPROX_SIMPLE)
+    # #print(cnts)i
+    # # for i in range(15):
+    #     cv.drawContours(yo,cnts[i],-1,(0,255,0),3)
+    
     # while True :
     # ret,frame=cap.read()
 
@@ -353,8 +383,8 @@ while(frames<299):
     # cnts=sorted(contours,key=cv.contourArea,reverse=True)[:2]
     '''
     # cv.waitKey(1)
-    k = cv2.waitKey(1) & 0xff
-        if k == 27 : break
+    k = cv.waitKey(1) & 0xff
+    if k == 27 : break
 
 cap.release()
 
