@@ -19,8 +19,8 @@ while(frames<299):
     width = int(img.shape[1] * scale_percent / 100)
     height = int(img.shape[0] * scale_percent / 100)
     dim = (width, height)
-    # fourcc = cv.VideoWriter_fourcc(*'XVID')
-    # out = cv.VideoWriter('1.avi',fourcc, 20.0, (dim[1],dim[0]))
+    fourcc = cv.VideoWriter_fourcc(*'XVID')
+    out = cv.VideoWriter('1.avi',fourcc, 20.0, (dim[1],dim[0]))
     # resize image
     frame = cv.resize(img, dim, interpolation = cv.INTER_AREA)
     frame2=frame.copy()

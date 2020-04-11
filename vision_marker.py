@@ -155,7 +155,7 @@ m=0
 while m < (len(ids)):
     x = int((corners[m][0][0][0] + corners[m][0][1][0] + corners[m][0][2][0] + corners[m][0][3][0]) / 4)
     y = int((corners[m][0][0][1] + corners[m][0][1][1] + corners[m][0][2][1] + corners[m][0][3][1]) / 4)
-    print(x, y,ids[m])
+    print(x, y,)
     center[2*m]=x
     center[2*m+1]=y
     m=m+1
