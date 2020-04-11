@@ -120,7 +120,12 @@ mybits = np.array([[1,1,1,1,1],[1,0,1,0,1],[1,1,1,1,1],[1,0,1,0,1],[1,1,1,1,1]],
 aruco_dict.bytesList[43] = aruco.Dictionary_getByteListFromBits(mybits)
 # cap = cv2.VideoCapture('video/Sentry_1.mkv')
 # ret, frame = cap.read()
-frame= cv2.imread("lol5.png")
+img= cv2.imread("lol5.png")
+scale_percent = 40 # percent of original size
+width = int(img.shape[1] * scale_percent / 100)
+height = int(img.shape[0] * scale_percent / 100)
+dim = (width, height)
+frame = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
 frame1=cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 lower_yel = np.array([23,41,133], dtype = "uint8")
 upper_yel = np.array([60,255,255], dtype = "uint8")
@@ -142,11 +147,11 @@ while m < (len(ids)):
     y = int((corners[m][0][0][1] + corners[m][0][1][1] + corners[m][0][2][1] + corners[m][0][3][1]) / 4)
     print(x,y,ids[m])
     m=m+1
-if False:
-    pts1 = np.float32([[1170,444], [443,351], [755,286], [1060,295]]) #29,12,10,26
-    pts2 = np.float32([[225,618], [104,404], [225,404], [346,450]])
+if True:
+    pts1 = np.float32([[142,115], [169,63], [314,75], [368,141]]) 
+    pts2 = np.float32([[347,404], [225,617], [105,404], [226,190]])#4 top vaale
 else:
-    pts1 = np.float32([[751,286], [1556,444], [512,450], [445,362]]) #10,0,26,15
+    pts1 = np.float32([[751,286], [1556,444], [512,450], [445,362]]) 
     pts2 = np.float32([[225,403], [225,190], [104,453], [105,403]])
 
 # dst=[(),(),(),()]
