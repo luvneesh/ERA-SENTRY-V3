@@ -123,8 +123,16 @@ mybits = np.array([[1,1,1,1,1],[1,0,1,0,1],[1,1,1,1,1],[1,0,1,0,1],[1,1,1,1,1]],
 aruco_dict.bytesList[43] = aruco.Dictionary_getByteListFromBits(mybits)
 cap = cv2.VideoCapture('video/Sentry_1.mkv')
 ret, frame = cap.read()
-# frame = cv2.imread("lol5.png")
-
+frame= cv2.imread("lol5.png")
+# ret, img = cap.read()
+# scale_percent = 40 # percent of original size
+# width = int(img.shape[1] * scale_percent / 100)
+# height = int(img.shape[0] * scale_percent / 100)
+# dim = (width, height)
+# # fourcc = cv.VideoWriter_fourcc(*'XVID')
+# # out = cv.VideoWriter('1.avi',fourcc, 20.0, (dim[1],dim[0]))
+# # resize image
+# frame = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
 frame1=cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 lower_yel = np.array([23,41,133], dtype = "uint8")
 upper_yel = np.array([60,255,255], dtype = "uint8")
@@ -133,8 +141,8 @@ frame1=255-frame1
 # clahe = cv2.createCLAHE(clipLimit=22.0, tileGridSize=(10,30))
 # frame1 = clahe.apply(frame1)
 
-# frame1 = cv2.adaptiveThreshold(frame1, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,11,2)
-# cv2.imshow('1', frame1)
+frame1 = cv2.adaptiveThreshold(frame1, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,11,2)
+cv2.imshow('1', frame1)
 # cv2.waitKey(-1)
 #lists of ids and the corners beloning to each id
 corners, ids, rejectedImgPoints = aruco.detectMarkers(frame1, aruco_dict)
@@ -147,7 +155,7 @@ m=0
 while m < (len(ids)):
     x = int((corners[m][0][0][0] + corners[m][0][1][0] + corners[m][0][2][0] + corners[m][0][3][0]) / 4)
     y = int((corners[m][0][0][1] + corners[m][0][1][1] + corners[m][0][2][1] + corners[m][0][3][1]) / 4)
-    print(x, y)
+    print(x, y,ids[m])
     center[2*m]=x
     center[2*m+1]=y
     m=m+1
