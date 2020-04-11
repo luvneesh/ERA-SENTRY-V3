@@ -294,7 +294,7 @@ print(pts1)
 print(pts2)
 M = cv2.getPerspectiveTransform(pts1,pts2)
 
-dst = cv2.warpPerspective(img,M,(808, 448))
+# dst = cv2.warpPerspective(img,M,(808, 448))
 
 # plt.subplot(121),plt.imshow(img),plt.title('Input')
 plt.subplot(),plt.imshow(dst),plt.title('Output')

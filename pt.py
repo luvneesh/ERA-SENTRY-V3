@@ -146,8 +146,8 @@ if False:
     pts1 = np.float32([[1170,444], [443,351], [755,286], [1060,295]]) #29,12,10,26
     pts2 = np.float32([[225,618], [104,404], [225,404], [346,450]])
 else:
-    pts1 = np.float32([[445,362], [569,246], [958,282], [1556,444]]) #15,34,22,0
-    pts2 = np.float32([[346,402], [225,578], [115,403], [225,190]])
+    pts1 = np.float32([[751,286], [1556,444], [512,450], [445,362]]) #10,0,26,15
+    pts2 = np.float32([[225,403], [225,190], [104,453], [105,403]])
 
 # dst=[(),(),(),()]
 M = cv2.getPerspectiveTransform(pts1,pts2)
@@ -155,4 +155,4 @@ dst = cv2.warpPerspective(frame,M,(449, 808))
 print(M)
 cv2.imshow('frame',dst)
 cv2.waitKey(0)
-# cv2.imwrite('pt.jpg',dst)
+cv2.imwrite('pt.jpg',dst)
