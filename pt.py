@@ -129,19 +129,21 @@ frame1=cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 lower_yel = np.array([23,41,133], dtype = "uint8")
 upper_yel = np.array([60,255,255], dtype = "uint8")
 frame1 = cv2.inRange(frame1, lower_yel, upper_yel)
+
 frame1=255-frame1
 # clahe = cv2.createCLAHE(clipLimit=22.0, tileGridSize=(10,30))
 # frame1 = clahe.apply(frame1)
 
 # frame1 = cv2.adaptiveThreshold(frame1, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,11,2)
-# cv2.imshow('1', frame1)
+cv2.imshow('1', frame1)
+cv2.waitKey(0)
 # cv2.waitKey(-1)
 #lists of ids and the corners beloning to each id
 corners, ids, rejectedImgPoints = aruco.detectMarkers(frame1, aruco_dict)
 # draw markers on farme
 frame1 = aruco.drawDetectedMarkers(frame, corners, (ids),  borderColor=(0, 255, 0))
-# print(corners)
-# cv2.waitKey(0)
+print(ids)
+# cv2.waitKey()
 center=[0]*(2*len(ids))
 m=0
 while m < (len(ids)):
@@ -153,141 +155,4 @@ while m < (len(ids)):
     m=m+1
 
 cv2.imshow('frame',frame)
-cv2.waitKey(0)
-cv2.imwrite('detected_markers6.jpg',frame)
-# cv2.waitKey()
-root=Tk()
-
-frame = Frame(root, bd=2, relief=SUNKEN)
-frame.grid_rowconfigure(0, weight=1)
-frame.grid_columnconfigure(0, weight=1)
-xscroll = Scrollbar(frame, orient=HORIZONTAL)
-xscroll.grid(row=1, column=0, sticky=E+W)
-yscroll = Scrollbar(frame)
-yscroll.grid(row=0, column=1, sticky=N+S)
-canvas = Canvas(frame, bd=0, xscrollcommand=xscroll.set, yscrollcommand=yscroll.set)
-canvas.grid(row=0, column=0, sticky=N+S+E+W)
-xscroll.config(command=canvas.xview)
-yscroll.config(command=canvas.yview)
-frame.pack(fill=BOTH,expand=1)
-
-img = ImageTk.PhotoImage(Image.open('detected_markers0.jpg'))
-canvas.create_image(0,0,image=img,anchor="nw")
-canvas.config(scrollregion=canvas.bbox(ALL))
-
-#function to be called when mouse is clicked
-pts1=[[0]*2]*4
-pts2=[[0]*2]*4
-pts=[0]*8
-i=0
-pt=[[29, 59], [58, 64], [29, 69], [109, 125], [109, 131], [109, 137], [86, 131], [132, 131], [86, 232], [92, 202], [98, 232], [232, 131], [232, 64], [232, 59], [232, 69],[261, 64], [203, 64], [203, 197], [232, 193], [232, 197], [232, 202], [262, 197], [364, 30], [370, 59], [376, 30], [354, 125], [354, 131], [354, 137], [376, 131], [332, 131], [436, 193], [407, 197], [436, 202]]
-# print(center)
-def mindis(point):
-    global center
-    a=0
-    mindist=math.sqrt((center[0]-point.x)*(center[0]-point.x)+(center[1]-point.y)*(center[1]-point.y))
-    for i in range(len(ids)):
-        # print("hi1")
-        dist=math.sqrt((center[2*i]-point.x)*(center[2*i]-point.x)+(center[2*i+1]-point.y)*(center[2*i+1]-point.y))
-        # print(dist, mindist)
-        if dist < mindist:
-            # print("hi")
-            mindist=dist
-            a=i
-    return a
-def printcoords(event):
-    #outputting x and y coords to console
-    global i, pts, center, pts1
-    print (event.x,event.y)
-    # a=0
-    # a=mindis(event)
-    # pts[i]=center[2*a]
-    # pts[i+1]=center[2*a+1]
-    pts[i]=event.x
-    pts[i+1]=event.y
-    canvas.create_oval(pts[i]-2, pts[i+1]-2, pts[i]+2, pts[i+1]+2, fill="#476042")
-    i=i+2
-    if i==8:
-        print(pts)
-        pts1 = np.float32([[pts[0],pts[1]],[pts[2],pts[3]],[pts[4], pts[5]],[pts[6], pts[7]]])
-        # print("hi")
-        # print(pts1)
-        # sys.exit()
-        canvas.destroy()
-        
-canvas.bind("<Button 1>",printcoords)
-root.mainloop()
-
-
-
-
-root1=Tk()
-
-frame1 = Frame(root1, bd=2, relief=SUNKEN)
-frame1.grid_rowconfigure(0, weight=1)
-frame1.grid_columnconfigure(0, weight=1)
-xscroll1 = Scrollbar(frame1, orient=HORIZONTAL)
-xscroll1.grid(row=1, column=0, sticky=E+W)
-yscroll1 = Scrollbar(frame1)
-yscroll1.grid(row=0, column=1, sticky=N+S)
-canvas1 = Canvas(frame1, bd=0, xscrollcommand=xscroll1.set, yscrollcommand=yscroll1.set)
-canvas1.grid(row=0, column=0, sticky=N+S+E+W)
-xscroll1.config(command=canvas1.xview)
-yscroll1.config(command=canvas1.yview)
-frame1.pack(fill=BOTH,expand=1)
-
-img1 = ImageTk.PhotoImage(Image.open('arena4.png'))
-canvas1.create_image(0,0,image=img1,anchor="nw")
-canvas1.config(scrollregion=canvas1.bbox(ALL))
-
-#function to be called when mouse is clicked
-pts=[0]*8
-i=0
-points=[[120, 758], [398, 658], [224, 658], [224, 618], [234, 618], [224, 404], [345, 454], [345, 404], [355, 404], [103, 404], [113, 404], [103, 454], [224, 190], [224, 230], [50, 170], [100, 160], [338, 100], [348, 50]]
-# print(center)
-def mindis1(point):
-    global points
-    a=0
-    mindist=10000
-    p=-1
-    for pt in points:
-        p=p+1
-        dist=math.sqrt(int(math.pow(pt[0]-point.x, 2))+int(math.pow(pt[1]-point.y, 2)))
-        if dist<mindist:
-            mindist=dist
-            a=p
-    return a
-            
-def printcoords1(event):
-    #outputting x and y coords to console
-    global i, pts, points, pts2
-    print (event.x,event.y)
-    # a=0
-    # a=mindis1(event)
-    # pts[i]=points[a][0]
-    # pts[i+1]=points[a][1]
-    pts[i]=event.x
-    pts[i+1]=event.y
-    canvas1.create_oval(pts[i]-2, pts[i+1]-2, pts[i]+2, pts[i+1]+2, fill="#476042")
-    i=i+2
-    if i==8:
-        print(pts)
-        pts2 = np.float32([[pts[0],pts[1]],[pts[2],pts[3]],[pts[4], pts[5]],[pts[6], pts[7]]])
-        # print(pts2)
-        # sys.exit()
-        canvas1.destroy()
-        
-canvas1.bind("<Button 1>",printcoords1)
-root1.mainloop()
-
-img = cv2.imread("pic.jpg")
-print("pt")
-print(pts1)
-print(pts2)
-M = cv2.getPerspectiveTransform(pts1,pts2)
-
-dst = cv2.warpPerspective(img,M,(808, 448))
-
-# plt.subplot(121),plt.imshow(img),plt.title('Input')
-plt.subplot(),plt.imshow(dst),plt.title('Output')
-plt.show()
+cv2.imwrite('detected_markers5.jpg',frame)
