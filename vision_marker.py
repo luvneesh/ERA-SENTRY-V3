@@ -17,7 +17,7 @@ import matplotlib.image as img
 aruco_dict = aruco.custom_dictionary(44, 5, 1)
 # add empty bytesList array to fill with 3 markers later
 aruco_dict.bytesList = np.empty(shape = (44, 4, 4), dtype = np.uint8)
-
+print(cv2.CV_FOURCC('m', 'p', '4', 'v'))
 # add new marker(s)
 mybits = np.array([[0,1,1,0,0],[1,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[1,1,1,1,1]], dtype = np.uint8)
 aruco_dict.bytesList[0] = aruco.Dictionary_getByteListFromBits(mybits)

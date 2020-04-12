@@ -4,24 +4,22 @@ import math
 import time
 
 cv.startWindowThread()
-cap = cv.VideoCapture('video/Sentry_1.mkv')
-img= cv.imread("lol5.png")
+cap = cv.VideoCapture('video/Sentry_2.mkv')
+img= cv.imread("lol6.png")
 
 scale_percent = 40 # percent of original size
 width = int(img.shape[1] * scale_percent / 100)
 height = int(img.shape[0] * scale_percent / 100)
 dim = (width, height)
 frame = cv.resize(img, dim, interpolation = cv.INTER_AREA)
-pts1 = np.float32([[142,115], [169,63], [314,75], [368,141]]) 
-pts2 = np.float32([[347,404], [225,617], [105,404], [226,190]])#4 top vaale
+pts1 = np.float32([[178,141],[211,79],[390,91],[468,177]])
+pts2 = np.float32([[105,404],[225,190],[347,403],[226,618]])#4 top vaale
 M = cv.getPerspectiveTransform(pts1,pts2)
 map_img= cv.imread("arena4.png")
 cv.imshow('b',map_img)
-fourcc = cv.VideoWriter_fourcc(*'mp4v')
-out = cv.VideoWriter('output1.mp4', fourcc, 15.0, (449,809),True)
 # cv.waitKey(0)
 frames=1
-while(frames<140):
+while(frames<299):
     
     map_img= cv.imread("arena4.png")
     frames=frames+1
@@ -67,24 +65,23 @@ while(frames<140):
         point2= np.float32([[P2[0]],[P2[1]],[1]])
         point1_new=np.matmul(M,point1)
         point1_new=point1_new/point1_new[2]
-        # point1_new[1]=point1_new[1]
+        point1_new[1]=point1_new[1]-20
+
         point2_new=np.matmul(M,point2)
         point2_new=point2_new/point2_new[2]
-        cv.arrowedLine(map_img,(int(point1_new[0]-40), int(point1_new[1]+165)),(int(point2_new[0]-40), int(point2_new[1]+165)),(0,0,255),2)
-        cv.circle(map_img,(int(point1_new[0]-40), int(point1_new[1]+165)), 15, (255,255,255), 2)
-        cv.arrowedLine(frame4,(int(centre[0]), int(centre[1])),(int(P2[0]), int(P2[1])),(0,0,255),4)
+        # cv.arrowedLine(map_img,(int(point1_new[0]), int(point1_new[1])),(int(point2_new[0]), int(point2_new[1])),(0,0,255),2)
+        cv.arrowedLine(frame4,(int(centre[0]-20), int(centre[1])),(int(P2[0]-20), int(P2[1])),(0,0,255),4)
         print(frames)
         # cv.putText(frame, "angle : " + str(int(angle)), (100,50), cv.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2);
    
-    dest = cv.warpPerspective(frame,M,(449, 808))
-    dest1=dest[0:600, 0:449]
-    dest=cv.resize(dest1,(449,808), interpolation = cv.INTER_CUBIC)
+    dest = cv.warpPerspective(frame4,M,(449, 808))
     
-     
+    
     # print('image dtype ',map_img.dtype)
-    out.write(map_img)
-    # map_img=cv.add(map_img,dest,dtype = cv.CV_8U)
+
+    map_img=cv.add(map_img,dest,dtype = cv.CV_8U)
     cv.imshow('b',map_img)
+    cv.imshow('c',frame)
     ''' hb detection ends'''
     
     if cv.waitKey(1) & 0xFF == ord('q'):

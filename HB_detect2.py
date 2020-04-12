@@ -6,6 +6,9 @@ import time
 cv.startWindowThread()
 cap = cv.VideoCapture('video/Sentry_2.mkv')
 img= cv.imread("lol6.png")
+fourcc = cv.VideoWriter_fourcc(*'mp4v')
+out = cv.VideoWriter('output2.mp4', fourcc, 15.0, (449,809),True)
+
 scale_percent = 40 # percent of original size
 width = int(img.shape[1] * scale_percent / 100)
 height = int(img.shape[0] * scale_percent / 100)
@@ -17,7 +20,7 @@ M = cv.getPerspectiveTransform(pts1,pts2)
 
 frames=1
 while(frames<299):
-    
+    map_img= cv.imread("arena4.png")
     frames=frames+1
     ret, img = cap.read()
     scale_percent = 40 # percent of original size
@@ -57,21 +60,27 @@ while(frames<299):
         # print(P1,P2)
         # cv.circle(frame,(int(centre[0]), int(centre[1])), 7, (0,0,0), -1)
         # cv.circle(frame,(int(centre[0]), int(centre[1])), 50, (77,93,100), -1)
-        cv.arrowedLine(frame4,(int(centre[0]), int(centre[1])),(int(P2[0]), int(P2[1])),(0,0,255),2)
-        # cv.putText(frame, "angle : " + str(int(angle)), (100,50), cv.FONT_HERSHEY_SIMPLEX, 0.75, (50,170,50), 2);
-    else :
-        angle=0
-        # print(P1,P2)
-        centre=(0,0)
-    dest = cv.warpPerspective(frame4,M,(449, 808))
-    
-    map_img= cv.imread("arena4.png")
-    print('image dtype ',map_img.dtype)
-
-    map_img=cv.add(map_img,dest,dtype = cv.CV_8U)
-    cv.imshow('b',map_img)
-    ''' hb detection ends'''
+        point1= np.float32([[centre[0]],[centre[1]],[1]])
+        point2= np.float32([[P2[0]],[P2[1]],[1]])
+        point1_new=np.matmul(M,point1)
+        point1_new=point1_new/point1_new[2]
+        # point1_new[1]=point1_new[1]
+        point2_new=np.matmul(M,point2)
+        point2_new=point2_new/point2_new[2]
+        cv.arrowedLine(map_img,(int(point1_new[0]), int(point1_new[1]-30)),(int(point2_new[0]), int(point2_new[1]-30)),(0,0,255),2)
+        cv.circle(map_img,(int(point1_new[0]), int(point1_new[1]-30)), 15, (255,255,255), 2)
+        # cv.arrowedLine(frame4,(int(centre[0]), int(centre[1])),(int(P2[0]), int(P2[1])),(0,0,255),4)
+        # print(frames)
+        # print('image dtype ',map_img.dtype)
+        # print(point_new)
+        # map_img=cv.add(map_img,dest,dtype = cv.CV_8U)
+        # cv.circle(map_img,(int(point_new[0]), int(point_new[1]-30)), 5, (0,0,255), -1)
+        cv.imshow('b',map_img)
+        out.write(map_img)
+        # cv.imwrite('tracing2.png',map_img)
+        # cv.imshow('l',frame)
     
     if cv.waitKey(1) & 0xFF == ord('q'):
         break
 cv.waitKey(0)
+out.release()
