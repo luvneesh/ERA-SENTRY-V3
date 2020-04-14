@@ -8,18 +8,20 @@ cv.startWindowThread()
 cap = cv.VideoCapture('video/Sentry_2.mkv')
 # out = cv.VideoWriter('')
 fourcc = cv.VideoWriter_fourcc(*'mp4v')
-out = cv.VideoWriter('input2.mp4', fourcc, 15.0, (449,809),True)
+out = cv.VideoWriter('input2_1080.mp4', fourcc, 15.0, (1920,1080),True)
 frames=1
 while(frames<299):
     # img = cv.imread("lol3.png")
     # frames=frames+1
     ret, img = cap.read()
+    # print (img.shape)
     scale_percent = 40 # percent of original size
     width = int(img.shape[1] * scale_percent / 100)
     height = int(img.shape[0] * scale_percent / 100)
     dim = (width, height)
+    # print(dim)
     # resize image
-    frame = cv.resize(img, dim, interpolation = cv.INTER_AREA)
+    frame=img.copy()
     frame2=frame.copy()
     frame3=frame2.copy()
     # fourcc = cv.VideoWriter_fourcc(*'XVID')
@@ -254,32 +256,31 @@ while(frames<299):
     # mask=cv.bitwise_or(mask1,mask2)
     contours, hierarchy = cv.findContours(Mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
     frame4=frame3.copy()
-    for i in contours:
-        x,y,w,h= cv.boundingRect(i)
-        # paddding=100
-        rect=cv.minAreaRect(i)
-        # cv.rectangle(frame3,(x,y),(x+w,y+h),(77,93,100),-1)
-        # paddding=100
-        # rect[0][0]-=paddding
-        # rect[0][1]-=paddding
-        # rect[1][0]+=paddding
-        # rect[1][0]+=paddding
-        box=cv.boxPoints(rect)
-        # print(box)
-        # paddding=100
-        # [0][0]-=paddding
-        # rect[0][1]-=paddding
-        # rect[1][0]+=paddding
-        # rect[1][0]+=paddding
-        box=np.int0(box)
-        centre=rect[0]
-        # cv.rectangle(frame3,box[0],box[2],(0,255,255))
-        cv.drawContours(frame4, [box],0,(255,255,255),2)
-        # cv.circle(frame3,(int(centre[0]), 200, 2, (77,93,100), 2)
-        print(centre)
-        cv.circle(frame3,(int(centre[0]), int(centre[1])), int (w*0.95), (77,93,100), -1)
-        cv.circle(frame3,(int(centre[0]), int(centre[1])), 7, (0,0,0), -1)
-    # cv.imshow('b',frame2)
+    i= max(contours, key = cv.contourArea)
+    x,y,w,h= cv.boundingRect(i)
+    # paddding=100
+    rect=cv.minAreaRect(i)
+    # cv.rectangle(frame3,(x,y),(x+w,y+h),(77,93,100),-1)
+    # paddding=100
+    # rect[0][0]-=paddding
+    # rect[0][1]-=paddding
+    # rect[1][0]+=paddding
+    # rect[1][0]+=paddding
+    box=cv.boxPoints(rect)
+    # print(box)
+    # paddding=100
+    # [0][0]-=paddding
+    # rect[0][1]-=paddding
+    # rect[1][0]+=paddding
+    # rect[1][0]+=paddding
+    box=np.int0(box)
+    centre=rect[0]
+    # cv.rectangle(frame3,box[0],box[2],(0,255,255))
+    cv.drawContours(frame4, [box],0,(255,255,255),2)
+    # cv.circle(frame3,(int(centre[0]), 200, 2, (77,93,100), 2)
+    print(centre)
+    cv.circle(frame3,(int(centre[0]), int(centre[1])), int (w*0.95), (77,93,100), -1)
+    cv.circle(frame3,(int(centre[0]), int(centre[1])), 7, (0,0,0), -1)
     # print(box)
     cv.imshow('bc',frame3)
     out.write(frame4)
